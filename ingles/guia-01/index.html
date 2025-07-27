@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Inglés Unidad 5 - Matías 🚀</title>
+    <style>
+        /* Estilos CSS (puedes mover esto a un archivo style.css si lo prefieres y enlazarlo) */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa; /* Azul claro */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: center;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+            min-height: 400px; /* Asegura un tamaño mínimo */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            color: #00796b; /* Verde oscuro */
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #00796b; /* Verde oscuro */
+            font-size: 1.8em;
+            margin-bottom: 25px;
+        }
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .question-text { /* Cambiado de .question para evitar conflicto con ID */
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            color: #4a148c; /* Morado oscuro */
+            min-height: 3em; /* Para asegurar espacio */
+        }
+        .options-container {
+            margin-top: 20px;
+        }
+        .options-container button {
+            display: block;
+            background-color: #90caf9; /* Azul medio */
+            color: #333;
+            padding: 15px;
+            margin: 10px auto; /* Centra los botones */
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 80%; /* Ancho de los botones */
+            max-width: 300px; /* Límite de ancho */
+            border: none; /* Sin borde */
+            cursor: pointer;
+        }
+        .options-container button:hover:not(:disabled) {
+            background-color: #64b5f6;
+            transform: translateY(-2px);
+        }
+        .options-container button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .start-button, .restart-button {
+            display: inline-block;
+            background-color: #4CAF50; /* Verde */
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1.2em;
+            border-radius: 10px;
+            margin-top: 30px;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .start-button:hover, .restart-button:hover {
+            background-color: #45a049;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.2em;
+            min-height: 2em;
+        }
+        .correct-feedback {
+            color: #2e7d32; /* Verde oscuro */
+        }
+        .incorrect-feedback {
+            color: #c62828; /* Rojo oscuro */
+        }
+        #results {
+            margin-top: 30px;
+        }
+        #results h2 {
+            margin-bottom: 15px;
+        }
+        #results table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            max-width: 400px; /* Ancho máximo de la tabla */
+        }
+        #results table th, #results table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        #results table th {
+            background-color: #00796b;
+            color: white;
+        }
+        #results table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="startScreen">
+            <h1>👋 ¡Hola Matías!</h1>
+            <h2>Preparado para tu Repaso de Inglés de la Unidad 5? ✨</h2>
+            <p>Esta guía es para ti. ¡Solo haz clic en la respuesta correcta! Los puntos se sumarán automáticamente y verás tu nota al final.</p>
+            <button class="start-button" onclick="startQuiz()">Comenzar el Quiz 🚀</button>
+        </div>
+
+        <div id="quizScreen" class="hidden">
+            <h2 id="sectionTitle"></h2>
+            <p class="question-text" id="questionText"></p>
+            <div class="options-container" id="optionsContainer">
+                </div>
+            <p class="feedback" id="feedbackMessage"></p>
+            <button id="nextQuestionBtn" class="next-button hidden" onclick="nextQuestion()">Siguiente Pregunta 👉</button>
+        </div>
+
+        <div id="resultsScreen" class="hidden">
+            <h1>¡Felicidades, Matías! Has completado el Quiz. 🎉</h1>
+            <h2>Tus Resultados:</h2>
+            <p id="totalPointsDisplay" style="color: #4a148c; font-size: 1.5em;"></p>
+            <p id="finalGradeDisplay" style="color: #00796b; font-size: 1.8em; font-weight: bold;"></p>
+
+            <h3 style="margin-top: 30px; color: #00796b;">Tabla de Referencia de Notas:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Puntos Obtenidos</th>
+                        <th>Nota (1.0 - 7.0)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+            
+            <p style="margin-top: 20px;">¡Sigue practicando para mejorar! 💪</p>
+            <button class="restart-button" onclick="restartQuiz()">Volver a Intentar 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // Array de objetos para almacenar todas las preguntas
+        const questions = [
+            // I. Vocabulary: Connecting People & Digital World (12 Puntos)
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "1. Muchas personas usan _______ para compartir fotos y videos con amigos. 📸",
+                options: ["a) apps", "b) social media"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "2. Si quieres leer información online, visitas un _______. 📖",
+                options: ["a) blog", "b) website"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "3. Necesito _______ estos documentos a la nube para poder acceder a ellos en cualquier lugar. ⬆️",
+                options: ["a) download", "b) upload"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "4. Mi abuela prefiere quedarse _______; a ella no le gusta usar internet. 📵",
+                options: ["a) offline", "b) online"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "5. Tener una buena _______ de contactos puede ayudarte a encontrar un trabajo. 🤝",
+                options: ["a) community", "b) network"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "6. Puedes encontrar muchas _______ útiles para aprender idiomas en tu teléfono. 📱",
+                options: ["a) devices", "b) apps"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "7. Él escribe un _______ diario sobre sus viajes por el mundo. ✈️",
+                options: ["a) website", "b) blog"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "8. Mi nueva computadora tiene un _______ muy rápido, lo que ayuda con los juegos. ⚡️",
+                options: ["a) screen", "b) processor"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "B. Indica si la definición es VERDADERA o FALSA. <br> 9. Un **Smartphone** es un tipo de reloj. ⌚️",
+                options: ["a) Verdadero", "b) Falso"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "10. **Wi-Fi** te permite conectarte a internet sin cables. 📡",
+                options: ["a) Verdadero", "b) Falso"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "11. **Digital** se refiere a algo que solo existe en papel. 📄",
+                options: ["a) Verdadero", "b) Falso"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "I. Vocabulary: Connecting People & Digital World 🌐",
+                question: "12. Una **Community** es un grupo de personas con intereses similares. 🏘️",
+                options: ["a) Verdadero", "b) Falso"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+
+            // II. Vocabulary: Remember your Manners (12 Puntos)
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "A. Elige la palabra que mejor completa la oración. <br> 13. Es importante mostrar _______ a tus profesores y mayores. 🙏",
+                options: ["a) disrespect", "b) respect"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "14. Por favor, no _______ cuando estoy hablando. Espera tu turno. 🤐",
+                options: ["a) interrupt", "b) listen"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "15. Decir \"gracias\" es una señal de buenos _______. 💖",
+                options: ["a) manners", "b) technology"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "16. Ella fue muy _______ y no saludó a nadie cuando entró a la habitación. 😠",
+                options: ["a) polite", "b) rude"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "17. Si cometes un error, siempre debes _______. 😔",
+                options: ["a) apologize", "b) ignore"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "18. Conocer la _______ adecuada es importante en situaciones formales. 🤵‍♀️",
+                options: ["a) etiquette", "b) rudeness"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "19. Es _______ ofrecer tu asiento a una persona mayor en el autobús. 👍",
+                options: ["a) rude", "b) polite"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "20. Él mostró gran _______ al ayudar a su vecino con las bolsas pesadas. 🤗",
+                options: ["a) thoughtlessness", "b) consideration"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "B. ¿Considerarías esta acción un \"buen modale\" o un \"mal modale\"? <br> 21. Usar tu teléfono durante la cena familiar. 📵",
+                options: ["a) Buen modale", "b) Mal modale"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "22. Decir \"por favor\" cuando pides algo. 🙏",
+                options: ["a) Buen modale", "b) Mal modale"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "23. Interrumpir a alguien mientras está hablando. 🗣️",
+                options: ["a) Buen modale", "b) Mal modale"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "II. Vocabulary: Remember your Manners 😇",
+                question: "24. Ayudar a alguien que se le cae algo. 🤝",
+                options: ["a) Buen modale", "b) Mal modale"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+
+            // III. Grammar: Question Forms (20 Puntos)
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "A. ¿Es esta una \"Subject Question\" (SQ) o una \"Object Question\" (OQ)? <br> 25. Who painted this beautiful picture? 🎨",
+                options: ["a) SQ", "b) OQ"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "26. What did you do yesterday evening? 🌙",
+                options: ["a) SQ", "b) OQ"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "27. Which student broke the window? 🪟",
+                options: ["a) SQ", "b) OQ"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "28. Where did they buy those shoes? 👟",
+                options: ["a) SQ", "b) OQ"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "29. What happened at the party? 🎉",
+                options: ["a) SQ", "b) OQ"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "30. Who taught you how to swim? 🏊",
+                options: ["a) SQ", "b) OQ"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "B. Elige la \"Question Tag\" correcta. <br> 31. You like pizza, _______? 🍕",
+                options: ["a) don't you", "b) do you"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "32. She isn't coming, _______? 🚫",
+                options: ["a) isn't she", "b) is she"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "33. He can play the guitar, _______? 🎸",
+                options: ["a) can he", "b) can't he"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "34. They didn't finish the project, _______? 👷‍♀️",
+                options: ["a) did they", "b) didn't they"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "35. It's a beautiful day, _______? ☀️",
+                options: ["a) isn't it", "b) is it"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "36. We should go now, _______? ⏰",
+                options: ["a) shouldn't we", "b) should we"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "C. Une la pregunta con la respuesta correcta. <br> 37. Who did you see at the cinema? 🎬",
+                options: ["a) Miguel de Cervantes.", "b) My friends, Sarah and Tom."],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "38. What did you eat for dinner? 🍽️",
+                options: ["a) Pizza and salad.", "b) To Brazil."],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "39. Which team won the match? 🏆",
+                options: ["a) The red team.", "b) Because she had an appointment."],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "40. Who wrote \"Don Quijote\"? ✍️",
+                options: ["a) Miguel de Cervantes.", "b) Pizza and salad."],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "41. Where are they going for holidays? ✈️",
+                options: ["a) To Brazil.", "b) My friends, Sarah and Tom."],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "III. Grammar: Question Forms ❓",
+                question: "42. Why did she leave early? 🏃‍♀️",
+                options: ["a) Because she had an appointment.", "b) The red team."],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+
+            // IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) (20 Puntos)
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "A. Elige la forma correcta del verbo (gerundio o infinitivo). <br> 43. My brother hates _______ (do) homework. 📚",
+                options: ["a) doing", "b) to do"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "44. I decided _______ (learn) a new language. 🗣️",
+                options: ["a) learning", "b) to learn"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "45. Have you finished _______ (clean) your room yet? 🧹",
+                options: ["a) cleaning", "b) to clean"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "46. Don't forget _______ (turn off) the lights when you leave. 💡",
+                options: ["a) turning off", "b) to turn off"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "47. She suggested _______ (order) some pizza for dinner. 🍕",
+                options: ["a) ordering", "b) to order"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "48. He agreed _______ (help) me with my math. ➕",
+                options: ["a) helping", "b) to help"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "49. I enjoy _______ (spend) time with my family. 👨‍👩‍👧‍👦",
+                options: ["a) spending", "b) to spend"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "50. They stopped _______ (talk) when the movie started. 🤫",
+                options: ["a) talking", "b) to talk"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "51. We plan _______ (visit) the museum next week. 🏛️",
+                options: ["a) visiting", "b) to visit"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "52. Would you mind _______ (close) the door, please? 🚪",
+                options: ["a) closing", "b) to close"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            // Diálogo B. (10 puntos en total)
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "B. Elige la forma verbal correcta (gerundio o infinitivo) para completar el diálogo. <br> 53. Anna: Hey Tom, what are you planning (1) _______ (do) this weekend? 🤔",
+                options: ["a) doing", "b) to do"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "54. Tom: I'm thinking of (2) _______ (go) hiking. ⛰️",
+                options: ["a) going", "b) to go"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "55. Tom: I really enjoy (3) _______ (be) in nature. 🌳",
+                options: ["a) being", "b) to be"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "56. Anna: That sounds fun! I decided (4) _______ (stay) home. 🏡",
+                options: ["a) staying", "b) to stay"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "57. Anna: And finish (5) _______ (read) my new book. 📖",
+                options: ["a) reading", "b) to read"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "58. Tom: Oh, remember (6) _______ (send) me that link for the online course. 🔗",
+                options: ["a) sending", "b) to send"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "59. Tom: I want (7) _______ (check) it out. ✅",
+                options: ["a) checking", "b) to check"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "60. Anna: Sure, I won't forget (8) _______ (send) it. ✉️",
+                options: ["a) sending", "b) to send"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "61. Anna: Would you mind (9) _______ (help) me with my computer later? 💻",
+                options: ["a) helping", "b) to help"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
+                question: "62. Anna: It stopped (10) _______ (work) properly. ❌",
+                options: ["a) working", "b) to work"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            
+            // V. Grammar: Questions ending with prepositions (16 Puntos)
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "A. Elige la pregunta correcta que termina con una preposición para cada respuesta. <br> 63. Respuesta: They are waiting *for the bus*. 🚌",
+                options: ["a) Who are they waiting?", "b) What are they waiting for?"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "64. Respuesta: He is looking *at the map*. 🗺️",
+                options: ["a) What is he looking at?", "b) Who is he looking at?"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "65. Respuesta: I am thinking *of my summer holidays*. 🏖️",
+                options: ["a) What are you thinking?", "b) What are you thinking of?"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "66. Respuesta: This book belongs *to my sister*. 👧",
+                options: ["a) Who does this book belong to?", "b) What does this book belong?"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "67. Respuesta: We are going *to the park*. 🌳",
+                options: ["a) Where are you going to?", "b) Where are you going?"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "68. Respuesta: She is writing *with a pen*. 🖊️",
+                options: ["a) What is she writing?", "b) What is she writing with?"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "69. Respuesta: They are talking *about the weather*. ☁️",
+                options: ["a) What are they talking?", "b) What are they talking about?"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "70. Respuesta: I work *with my brother*. 🧑‍🤝‍🧑",
+                options: ["a) Who do you work?", "b) Who do you work with?"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "B. Elige la preposición correcta para completar la pregunta. <br> 71. Who are you waiting _______? 🕒",
+                options: ["a) for", "b) in"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "72. What are you interested _______? 🧐",
+                options: ["a) on", "b) in"],
+                correctAnswerIndex: 1,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "73. Which project are you working _______? 👷",
+                options: ["a) on", "b) with"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "74. Who are you going to the party _______? 🎉",
+                options: ["a) with", "b) for"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "75. What are you worried _______? 😟",
+                options: ["a) about", "b) for"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "76. Where is she _______? 🌎",
+                options: ["a) from", "b) to"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "77. What kind of music are you listening _______? 🎶",
+                options: ["a) to", "b) at"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+            {
+                section: "V. Grammar: Questions ending with prepositions 🔚",
+                question: "78. Who are you talking _______? 🗣️",
+                options: ["a) with", "b) for"],
+                correctAnswerIndex: 0,
+                points: 1
+            },
+             // Total de puntos para el quiz. Suma todos los 'points' en el array `questions`.
+             // 12 (I) + 12 (II) + 20 (III) + 20 (IV) + 16 (V) = 80 puntos
+        ];
+
+        let currentQuestionIndex = 0;
+        let userScore = 0;
+        const totalPossiblePoints = 80; // Suma de todos los 'points' en el array questions
+
+        // Referencias a elementos HTML
+        const startScreen = document.getElementById('startScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const resultsScreen = document.getElementById('resultsScreen');
+
+        const sectionTitle = document.getElementById('sectionTitle');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+
+        const totalPointsDisplay = document.getElementById('totalPointsDisplay');
+        const finalGradeDisplay = document.getElementById('finalGradeDisplay');
+        const gradeTableBody = document.querySelector('#resultsScreen table tbody');
+
+        // --- Funciones del Quiz ---
+
+        function startQuiz() {
+            sessionStorage.setItem('quizPoints', '0'); // Reiniciar puntos
+            currentQuestionIndex = 0;
+            userScore = 0;
+            startScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const q = questions[currentQuestionIndex];
+                sectionTitle.textContent = q.section;
+                questionText.innerHTML = q.question; // Usar innerHTML por el <br>
+                optionsContainer.innerHTML = ''; // Limpiar opciones anteriores
+                feedbackMessage.textContent = ''; // Limpiar feedback
+                feedbackMessage.className = 'feedback'; // Resetear clases
+                nextQuestionBtn.classList.add('hidden'); // Ocultar botón Siguiente
+
+                q.options.forEach((optionText, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = optionText;
+                    button.onclick = () => checkAnswer(index === q.correctAnswerIndex);
+                    optionsContainer.appendChild(button);
+                });
+            } else {
+                showResults();
+            }
+        }
+
+        function checkAnswer(isCorrect) {
+            const currentQ = questions[currentQuestionIndex];
+            const optionsButtons = optionsContainer.querySelectorAll('button');
+
+            // Deshabilitar botones después de la selección
+            optionsButtons.forEach(button => {
+                button.disabled = true;
+                button.style.cursor = 'not-allowed';
+            });
+
+            if (isCorrect) {
+                userScore += currentQ.points;
+                feedbackMessage.textContent = `¡Correcto! 🎉 Ganaste ${currentQ.points} punto${currentQ.points !== 1 ? 's' : ''}.`;
+                feedbackMessage.className = 'feedback correct-feedback';
+            } else {
+                feedbackMessage.textContent = '¡Incorrecto! 😔 Sigue practicando.';
+                feedbackMessage.className = 'feedback incorrect-feedback';
+            }
+            
+            // Guarda los puntos acumulados en sessionStorage para persistencia si la página se recarga
+            sessionStorage.setItem('quizPoints', userScore); 
+            nextQuestionBtn.classList.remove('hidden'); // Mostrar botón Siguiente
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+
+        function calculateGrade(score) {
+            let finalGrade;
+            // Nota mínima 2.0 por 0 puntos.
+            // Nota de aprobación 4.0 con 60% de exigencia (0.60 * 80 = 48 puntos).
+            // Nota máxima 7.0 con 80 puntos.
+
+            if (score <= 48) {
+                // Rango 2.0 a 4.0 (de 0 a 48 puntos)
+                finalGrade = 2.0 + (score / 48) * 2.0;
+            } else {
+                // Rango 4.0 a 7.0 (de 49 a 80 puntos)
+                finalGrade = 4.0 + ((score - 48) / (totalPossiblePoints - 48)) * 3.0;
+            }
+            
+            // Asegurar que la nota esté en el rango de 1.0 a 7.0 y redondear
+            finalGrade = Math.min(7.0, Math.max(1.0, finalGrade)).toFixed(1);
+            return finalGrade;
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+
+            // Recupera el score final (por si se refresca la página de resultados)
+            userScore = parseInt(sessionStorage.getItem('quizPoints') || '0'); 
+            totalPointsDisplay.textContent = `Puntos Obtenidos: ${userScore} / ${totalPossiblePoints}`;
+            
+            const grade = calculateGrade(userScore);
+            finalGradeDisplay.textContent = `Tu Nota Final: ${grade}`;
+
+            // Generar la tabla de notas para referencia
+            gradeTableBody.innerHTML = ''; // Limpiar tabla antes de llenar
+            const gradeRanges = [
+                { points: "0", displayGrade: "2.0" },
+                { points: "1-15", displayGrade: "2.0 - 2.6" }, // Approx
+                { points: "16-23", displayGrade: "2.7 - 3.0" },
+                { points: "24-31", displayGrade: "3.0 - 3.4" },
+                { points: "32-39", displayGrade: "3.5 - 3.8" },
+                { points: "40-47", displayGrade: "3.9" },
+                { points: "48", displayGrade: "4.0 (Aprobación)" }, // Punto de quiebre
+                { points: "49-55", displayGrade: "4.1 - 4.6" },
+                { points: "56-63", displayGrade: "4.7 - 5.3" },
+                { points: "64-71", displayGrade: "5.4 - 6.1" },
+                { points: "72-79", displayGrade: "6.2 - 6.9" },
+                { points: "80", displayGrade: "7.0" }
+            ];
+
+            gradeRanges.forEach(range => {
+                const row = gradeTableBody.insertRow();
+                const cell1 = row.insertCell();
+                const cell2 = row.insertCell();
+                cell1.textContent = range.points;
+                cell2.textContent = range.displayGrade;
+                if (range.points === "48") {
+                    row.style.fontWeight = 'bold';
+                    row.style.backgroundColor = '#dcedc8'; /* Verde claro para destacar */
+                }
+            });
+        }
+
+        function restartQuiz() {
+            sessionStorage.removeItem('quizPoints'); // Limpiar puntos guardados
+            currentQuestionIndex = 0;
+            userScore = 0;
+            resultsScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
+
+        // Si la página se carga de nuevo (ej. por un refresh), intenta mostrar la pantalla correcta
+        window.onload = () => {
+            if (sessionStorage.getItem('quizPoints') !== null && currentQuestionIndex < questions.length) {
+                // Si hay puntos guardados, es probable que estaba en medio del quiz, pero con un solo HTML,
+                // un refresh te lleva al inicio. La lógica de sessionStorage es más útil para quiz multi-página.
+                // Para este quiz de un solo HTML, un refresh es como reiniciar.
+                restartQuiz(); 
+            } else {
+                restartQuiz(); // Asegurar que siempre se inicie desde cero si no hay progreso o se terminó
+            }
+        };
+
+        // Pre-carga inicial para asegurar que sessionStorage esté listo si es necesario
+        if (!sessionStorage.getItem('quizPoints')) {
+            sessionStorage.setItem('quizPoints', '0');
+        }
+    </script>
+</body>
+</html>
