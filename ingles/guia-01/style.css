@@ -71,21 +71,21 @@ p {
     cursor: not-allowed;
 }
 /* Estilo unificado para botones de acción (Start, Restart, Next, Review) */
-.start-button, .restart-button, .next-button, .review-button { /* Added .review-button here */
+.start-button, .restart-button, .next-button, .review-button {
     display: inline-block;
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50; /* Verde */
     color: white;
     padding: 15px 30px;
     text-align: center;
     text-decoration: none;
     font-size: 1.2em;
     border-radius: 10px;
-    margin-top: 5px; /* ADJUSTED FROM 30px TO 5px */
+    margin-top: 5px; /* Ajuste para mover el botón "Siguiente Pregunta" más arriba */
     transition: background-color 0.3s ease;
     border: none;
     cursor: pointer;
 }
-.start-button:hover, .restart-button:hover, .next-button:hover, .review-button:hover { /* Added .review-button here */
+.start-button:hover, .restart-button:hover, .next-button:hover, .review-button:hover {
     background-color: #45a049;
 }
 .feedback {
@@ -106,7 +106,8 @@ p {
 #results h2 {
     margin-bottom: 15px;
 }
-#results table { /* This table is no longer used but kept in case you re-add it */
+/* Aunque la tabla de resultados se eliminó del HTML, mantengo estos estilos por si decides volver a usarlos */
+#results table { 
     width: 100%;
     border-collapse: collapse;
     margin: 20px auto;
