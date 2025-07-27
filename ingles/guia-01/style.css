@@ -70,22 +70,22 @@ p {
     opacity: 0.6;
     cursor: not-allowed;
 }
-/* Estilo unificado para botones de acción (Start, Restart, Next) */
-.start-button, .restart-button, .next-button {
+/* Estilo unificado para botones de acción (Start, Restart, Next, Review) */
+.start-button, .restart-button, .next-button, .review-button { /* Added .review-button here */
     display: inline-block;
-    background-color: #4CAF50; /* Verde */
+    background-color: #4CAF50; /* Green */
     color: white;
     padding: 15px 30px;
     text-align: center;
     text-decoration: none;
     font-size: 1.2em;
     border-radius: 10px;
-    margin-top: 30px;
+    margin-top: 5px; /* ADJUSTED FROM 30px TO 5px */
     transition: background-color 0.3s ease;
     border: none;
     cursor: pointer;
 }
-.start-button:hover, .restart-button:hover, .next-button:hover {
+.start-button:hover, .restart-button:hover, .next-button:hover, .review-button:hover { /* Added .review-button here */
     background-color: #45a049;
 }
 .feedback {
@@ -106,7 +106,7 @@ p {
 #results h2 {
     margin-bottom: 15px;
 }
-#results table {
+#results table { /* This table is no longer used but kept in case you re-add it */
     width: 100%;
     border-collapse: collapse;
     margin: 20px auto;
