@@ -1,146 +1,18 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Inglés Unidad 5 - Matías 🚀</title>
-    <style>
-        /* Estilos CSS (puedes mover esto a un archivo style.css si lo prefieres y enlazarlo) */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #e0f7fa; /* Azul claro */
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            justify-content: center;
-        }
-        .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: auto;
-            min-height: 400px; /* Asegura un tamaño mínimo */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        h1 {
-            color: #00796b; /* Verde oscuro */
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-        h2 {
-            color: #00796b; /* Verde oscuro */
-            font-size: 1.8em;
-            margin-bottom: 25px;
-        }
-        p {
-            font-size: 1.1em;
-            line-height: 1.6;
-        }
-        .question-text { /* Cambiado de .question para evitar conflicto con ID */
-            font-size: 1.3em;
-            margin-bottom: 30px;
-            color: #4a148c; /* Morado oscuro */
-            min-height: 3em; /* Para asegurar espacio */
-        }
-        .options-container {
-            margin-top: 20px;
-        }
-        .options-container button {
-            display: block;
-            background-color: #90caf9; /* Azul medio */
-            color: #333;
-            padding: 15px;
-            margin: 10px auto; /* Centra los botones */
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 1.1em;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            width: 80%; /* Ancho de los botones */
-            max-width: 300px; /* Límite de ancho */
-            border: none; /* Sin borde */
-            cursor: pointer;
-        }
-        .options-container button:hover:not(:disabled) {
-            background-color: #64b5f6;
-            transform: translateY(-2px);
-        }
-        .options-container button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        .start-button, .restart-button {
-            display: inline-block;
-            background-color: #4CAF50; /* Verde */
-            color: white;
-            padding: 15px 30px;
-            text-align: center;
-            text-decoration: none;
-            font-size: 1.2em;
-            border-radius: 10px;
-            margin-top: 30px;
-            transition: background-color 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-        .start-button:hover, .restart-button:hover {
-            background-color: #45a049;
-        }
-        .feedback {
-            margin-top: 20px;
-            font-weight: bold;
-            font-size: 1.2em;
-            min-height: 2em;
-        }
-        .correct-feedback {
-            color: #2e7d32; /* Verde oscuro */
-        }
-        .incorrect-feedback {
-            color: #c62828; /* Rojo oscuro */
-        }
-        #results {
-            margin-top: 30px;
-        }
-        #results h2 {
-            margin-bottom: 15px;
-        }
-        #results table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px auto;
-            max-width: 400px; /* Ancho máximo de la tabla */
-        }
-        #results table th, #results table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-        #results table th {
-            background-color: #00796b;
-            color: white;
-        }
-        #results table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
+    <title>English Unit 5 Quiz - Matías 🚀</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <div id="startScreen">
-            <h1>👋 ¡Hola Matías!</h1>
-            <h2>Preparado para tu Repaso de Inglés de la Unidad 5? ✨</h2>
-            <p>Esta guía es para ti. ¡Solo haz clic en la respuesta correcta! Los puntos se sumarán automáticamente y verás tu nota al final.</p>
-            <button class="start-button" onclick="startQuiz()">Comenzar el Quiz 🚀</button>
+            <h1>👋 Hi Matías!</h1>
+            <h2>Ready for your English Unit 5 Review? ✨</h2>
+            <p>This guide is for you. Just click on the correct answer! Points will be added automatically, and you'll see your grade at the end.</p>
+            <button class="start-button" onclick="startQuiz()">Start Quiz 🚀</button>
         </div>
 
         <div id="quizScreen" class="hidden">
@@ -149,211 +21,211 @@
             <div class="options-container" id="optionsContainer">
                 </div>
             <p class="feedback" id="feedbackMessage"></p>
-            <button id="nextQuestionBtn" class="next-button hidden" onclick="nextQuestion()">Siguiente Pregunta 👉</button>
+            <button id="nextQuestionBtn" class="next-button hidden" onclick="nextQuestion()">Next Question 👉</button>
         </div>
 
         <div id="resultsScreen" class="hidden">
-            <h1>¡Felicidades, Matías! Has completado el Quiz. 🎉</h1>
-            <h2>Tus Resultados:</h2>
+            <h1>Congratulations, Matías! You've completed the Quiz. 🎉</h1>
+            <h2>Your Results:</h2>
             <p id="totalPointsDisplay" style="color: #4a148c; font-size: 1.5em;"></p>
             <p id="finalGradeDisplay" style="color: #00796b; font-size: 1.8em; font-weight: bold;"></p>
 
-            <h3 style="margin-top: 30px; color: #00796b;">Tabla de Referencia de Notas:</h3>
+            <h3 style="margin-top: 30px; color: #00796b;">Grade Reference Table:</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>Puntos Obtenidos</th>
-                        <th>Nota (1.0 - 7.0)</th>
+                        <th>Points Obtained</th>
+                        <th>Grade (1.0 - 7.0)</th>
                     </tr>
                 </thead>
                 <tbody>
                     </tbody>
             </table>
             
-            <p style="margin-top: 20px;">¡Sigue practicando para mejorar! 💪</p>
-            <button class="restart-button" onclick="restartQuiz()">Volver a Intentar 🔄</button>
+            <p style="margin-top: 20px;">Keep practicing to improve! 💪</p>
+            <button class="restart-button" onclick="restartQuiz()">Try Again 🔄</button>
         </div>
     </div>
 
     <script>
-        // Array de objetos para almacenar todas las preguntas
+        // Array of objects to store all questions
         const questions = [
-            // I. Vocabulary: Connecting People & Digital World (12 Puntos)
+            // I. Vocabulary: Connecting People & Digital World (12 Points)
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "A. Elige la palabra que mejor completa la oración. <br> 1. Muchas personas usan _______ para compartir fotos y videos con amigos. 📸",
+                question: "A. Choose the word that best completes the sentence. <br> 1. Many people use _______ to share photos and videos with friends. 📸",
                 options: ["a) apps", "b) social media"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "2. Si quieres leer información online, visitas un _______. 📖",
+                question: "2. If you want to read information online, you visit a _______. 📖",
                 options: ["a) blog", "b) website"],
                 correctAnswerIndex: 0,
                 points: 1
             },
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "3. Necesito _______ estos documentos a la nube para poder acceder a ellos en cualquier lugar. ⬆️",
+                question: "3. I need to _______ these documents to the cloud to access them anywhere. ⬆️",
                 options: ["a) download", "b) upload"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "4. Mi abuela prefiere quedarse _______; a ella no le gusta usar internet. 📵",
+                question: "4. My grandmother prefers to stay _______; she doesn't like using the internet. 📵",
                 options: ["a) offline", "b) online"],
                 correctAnswerIndex: 0,
                 points: 1
             },
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "5. Tener una buena _______ de contactos puede ayudarte a encontrar un trabajo. 🤝",
+                question: "5. Having a good _______ of contacts can help you find a job. 🤝",
                 options: ["a) community", "b) network"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "6. Puedes encontrar muchas _______ útiles para aprender idiomas en tu teléfono. 📱",
+                question: "6. You can find many useful _______ for learning languages on your phone. 📱",
                 options: ["a) devices", "b) apps"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "7. Él escribe un _______ diario sobre sus viajes por el mundo. ✈️",
+                question: "7. He writes a daily _______ about his travels around the world. ✈️",
                 options: ["a) website", "b) blog"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "8. Mi nueva computadora tiene un _______ muy rápido, lo que ayuda con los juegos. ⚡️",
+                question: "8. My new computer has a very fast _______, which helps with games. ⚡️",
                 options: ["a) screen", "b) processor"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "B. Indica si la definición es VERDADERA o FALSA. <br> 9. Un **Smartphone** es un tipo de reloj. ⌚️",
-                options: ["a) Verdadero", "b) Falso"],
+                question: "B. Indicate if the definition is TRUE or FALSE. <br> 9. A **Smartphone** is a type of watch. ⌚️",
+                options: ["a) True", "b) False"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "10. **Wi-Fi** te permite conectarte a internet sin cables. 📡",
-                options: ["a) Verdadero", "b) Falso"],
+                question: "10. **Wi-Fi** allows you to connect to the internet without cables. 📡",
+                options: ["a) True", "b) False"],
                 correctAnswerIndex: 0,
                 points: 1
             },
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "11. **Digital** se refiere a algo que solo existe en papel. 📄",
-                options: ["a) Verdadero", "b) Falso"],
+                question: "11. **Digital** refers to something that only exists on paper. 📄",
+                options: ["a) True", "b) False"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "I. Vocabulary: Connecting People & Digital World 🌐",
-                question: "12. Una **Community** es un grupo de personas con intereses similares. 🏘️",
-                options: ["a) Verdadero", "b) Falso"],
+                question: "12. A **Community** is a group of people with similar interests. 🏘️",
+                options: ["a) True", "b) False"],
                 correctAnswerIndex: 0,
                 points: 1
             },
 
-            // II. Vocabulary: Remember your Manners (12 Puntos)
+            // II. Vocabulary: Remember your Manners (12 Points)
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "A. Elige la palabra que mejor completa la oración. <br> 13. Es importante mostrar _______ a tus profesores y mayores. 🙏",
+                question: "A. Choose the word that best completes the sentence. <br> 13. It's important to show _______ to your teachers and elders. 🙏",
                 options: ["a) disrespect", "b) respect"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "14. Por favor, no _______ cuando estoy hablando. Espera tu turno. 🤐",
+                question: "14. Please, don't _______ when I'm speaking. Wait for your turn. 🤐",
                 options: ["a) interrupt", "b) listen"],
                 correctAnswerIndex: 0,
                 points: 1
             },
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "15. Decir \"gracias\" es una señal de buenos _______. 💖",
+                question: "15. Saying \"thank you\" is a sign of good _______. 💖",
                 options: ["a) manners", "b) technology"],
                 correctAnswerIndex: 0,
                 points: 1
             },
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "16. Ella fue muy _______ y no saludó a nadie cuando entró a la habitación. 😠",
+                question: "16. She was very _______ and didn't greet anyone when she entered the room. 😠",
                 options: ["a) polite", "b) rude"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "17. Si cometes un error, siempre debes _______. 😔",
+                question: "17. If you make a mistake, you should always _______. 😔",
                 options: ["a) apologize", "b) ignore"],
                 correctAnswerIndex: 0,
                 points: 1
             },
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "18. Conocer la _______ adecuada es importante en situaciones formales. 🤵‍♀️",
+                question: "18. Knowing the proper _______ is important in formal situations. 🤵‍♀️",
                 options: ["a) etiquette", "b) rudeness"],
                 correctAnswerIndex: 0,
                 points: 1
             },
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "19. Es _______ ofrecer tu asiento a una persona mayor en el autobús. 👍",
+                question: "19. It's _______ to offer your seat to an older person on the bus. 👍",
                 options: ["a) rude", "b) polite"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "20. Él mostró gran _______ al ayudar a su vecino con las bolsas pesadas. 🤗",
+                question: "20. He showed great _______ by helping his neighbor with the heavy bags. 🤗",
                 options: ["a) thoughtlessness", "b) consideration"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "B. ¿Considerarías esta acción un \"buen modale\" o un \"mal modale\"? <br> 21. Usar tu teléfono durante la cena familiar. 📵",
-                options: ["a) Buen modale", "b) Mal modale"],
+                question: "B. Would you consider this action \"good manners\" or \"bad manners\"? <br> 21. Using your phone during family dinner. 📵",
+                options: ["a) Good manners", "b) Bad manners"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "22. Decir \"por favor\" cuando pides algo. 🙏",
-                options: ["a) Buen modale", "b) Mal modale"],
+                question: "22. Saying \"please\" when asking for something. 🙏",
+                options: ["a) Good manners", "b) Bad manners"],
                 correctAnswerIndex: 0,
                 points: 1
             },
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "23. Interrumpir a alguien mientras está hablando. 🗣️",
-                options: ["a) Buen modale", "b) Mal modale"],
+                question: "23. Interrupting someone while they are talking. 🗣️",
+                options: ["a) Good manners", "b) Bad manners"],
                 correctAnswerIndex: 1,
                 points: 1
             },
             {
                 section: "II. Vocabulary: Remember your Manners 😇",
-                question: "24. Ayudar a alguien que se le cae algo. 🤝",
-                options: ["a) Buen modale", "b) Mal modale"],
+                question: "24. Helping someone who drops something. 🤝",
+                options: ["a) Good manners", "b) Bad manners"],
                 correctAnswerIndex: 0,
                 points: 1
             },
 
-            // III. Grammar: Question Forms (20 Puntos)
+            // III. Grammar: Question Forms (20 Points)
             {
                 section: "III. Grammar: Question Forms ❓",
-                question: "A. ¿Es esta una \"Subject Question\" (SQ), o \"Object Question\" (OQ)? <br> 25. What did you hear on the news? 📰",
+                question: "A. Is this a \"Subject Question\" (SQ), or \"Object Question\" (OQ)? <br> 25. What did you hear on the news? 📰",
                 options: ["a) SQ", "b) OQ"],
                 correctAnswerIndex: 1,
                 points: 1
@@ -451,7 +323,7 @@
             },
             {
                 section: "III. Grammar: Question Forms ❓",
-                question: "B. Elige la \"Question Tag\" correcta. <br> 39. You like pizza, _______? 🍕",
+                question: "B. Choose the correct \"Question Tag\". <br> 39. You like pizza, _______? 🍕",
                 options: ["a) don't you", "b) do you"],
                 correctAnswerIndex: 0,
                 points: 1
@@ -492,10 +364,10 @@
                 points: 1
             },
 
-            // IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) (20 Puntos)
+            // IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) (20 Points)
             {
                 section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
-                question: "A. Elige la forma correcta del verbo (gerundio o infinitivo). <br> 45. My brother hates _______ (do) homework. 📚",
+                question: "A. Choose the correct verb form (gerund or infinitive). <br> 45. My brother hates _______ (do) homework. 📚",
                 options: ["a) doing", "b) to do"],
                 correctAnswerIndex: 0,
                 points: 1
@@ -563,10 +435,10 @@
                 correctAnswerIndex: 0,
                 points: 1
             },
-            // Diálogo B. (10 puntos en total)
+            // Dialogue B. (10 points total)
             {
                 section: "IV. Grammar: Verbs followed by -ing and to (Infinitive/Gerund) ✅",
-                question: "B. Elige la forma verbal correcta (gerundio o infinitivo) para completar el diálogo. <br> 55. Anna: Hey Tom, what are you planning (1) _______ (do) this weekend? 🤔",
+                question: "B. Choose the correct verb form (gerund or infinitive) to complete the dialogue. <br> 55. Anna: Hey Tom, what are you planning (1) _______ (do) this weekend? 🤔",
                 options: ["a) doing", "b) to do"],
                 correctAnswerIndex: 1,
                 points: 1
@@ -635,7 +507,7 @@
                 points: 1
             },
             
-            // V. Grammar: Questions ending with prepositions (16 Puntos)
+            // V. Grammar: Questions ending with prepositions (16 Points)
             {
                 section: "V. Grammar: Questions ending with prepositions 🔚",
                 question: "A. Rearrange the words to form questions ending with prepositions. <br> 65. With are project this who you working on?",
@@ -734,19 +606,19 @@
                 correctAnswerIndex: 0,
                 points: 1
             },
-            // Las preguntas 79 y 80 de esta sección corresponden a la siguiente imagen que falta.
-            // Por el momento, el quiz tiene 78 preguntas.
-            // Para llegar a 80 puntos, necesitaríamos 2 preguntas más en esta sección.
-            // O ajustar el totalPossiblePoints si la guía solo tiene 78 preguntas.
-            // He ajustado el totalPossiblePoints a 78 por ahora, asumiendo que el documento solo tiene hasta la 78.
-            // Si hay más preguntas en otra imagen, por favor, súbela.
+            // The questions 79 and 80 for this section correspond to the next missing image.
+            // For now, the quiz has 78 questions.
+            // To reach 80 points, we would need 2 more questions in this section.
+            // Or adjust totalPossiblePoints if the guide only has 78 questions.
+            // I have adjusted totalPossiblePoints to 78 for now, assuming the document only goes up to 78.
+            // If there are more questions in another image, please upload it.
         ];
 
         let currentQuestionIndex = 0;
         let userScore = 0;
-        const totalPossiblePoints = 78; // Suma de todos los 'points' en el array questions. Actualizado a 78.
+        const totalPossiblePoints = 78; // Sum of all 'points' in the questions array. Updated to 78.
 
-        // Referencias a elementos HTML
+        // References to HTML elements
         const startScreen = document.getElementById('startScreen');
         const quizScreen = document.getElementById('quizScreen');
         const resultsScreen = document.getElementById('resultsScreen');
@@ -761,10 +633,10 @@
         const finalGradeDisplay = document.getElementById('finalGradeDisplay');
         const gradeTableBody = document.querySelector('#resultsScreen table tbody');
 
-        // --- Funciones del Quiz ---
+        // --- Quiz Functions ---
 
         function startQuiz() {
-            sessionStorage.setItem('quizPoints', '0'); // Reiniciar puntos
+            sessionStorage.setItem('quizPoints', '0'); // Reset points
             currentQuestionIndex = 0;
             userScore = 0;
             startScreen.classList.add('hidden');
@@ -776,11 +648,11 @@
             if (currentQuestionIndex < questions.length) {
                 const q = questions[currentQuestionIndex];
                 sectionTitle.textContent = q.section;
-                questionText.innerHTML = q.question; // Usar innerHTML por el <br>
-                optionsContainer.innerHTML = ''; // Limpiar opciones anteriores
-                feedbackMessage.textContent = ''; // Limpiar feedback
-                feedbackMessage.className = 'feedback'; // Resetear clases
-                nextQuestionBtn.classList.add('hidden'); // Ocultar botón Siguiente
+                questionText.innerHTML = q.question; // Use innerHTML for <br>
+                optionsContainer.innerHTML = ''; // Clear previous options
+                feedbackMessage.textContent = ''; // Clear feedback
+                feedbackMessage.className = 'feedback'; // Reset classes
+                nextQuestionBtn.classList.add('hidden'); // Hide Next button
 
                 q.options.forEach((optionText, index) => {
                     const button = document.createElement('button');
@@ -797,7 +669,7 @@
             const currentQ = questions[currentQuestionIndex];
             const optionsButtons = optionsContainer.querySelectorAll('button');
 
-            // Deshabilitar botones después de la selección
+            // Disable buttons after selection
             optionsButtons.forEach(button => {
                 button.disabled = true;
                 button.style.cursor = 'not-allowed';
@@ -805,16 +677,16 @@
 
             if (isCorrect) {
                 userScore += currentQ.points;
-                feedbackMessage.textContent = `¡Correcto! 🎉 Ganaste ${currentQ.points} punto${currentQ.points !== 1 ? 's' : ''}.`;
+                feedbackMessage.textContent = `Correct! 🎉 You earned ${currentQ.points} point${currentQ.points !== 1 ? 's' : ''}.`;
                 feedbackMessage.className = 'feedback correct-feedback';
             } else {
-                feedbackMessage.textContent = '¡Incorrecto! 😔 Sigue practicando.';
+                feedbackMessage.textContent = 'Incorrect! 😔 Keep practicing.';
                 feedbackMessage.className = 'feedback incorrect-feedback';
             }
             
-            // Guarda los puntos acumulados en sessionStorage para persistencia si la página se recarga
+            // Save accumulated points in sessionStorage for persistence if the page reloads
             sessionStorage.setItem('quizPoints', userScore); 
-            nextQuestionBtn.classList.remove('hidden'); // Mostrar botón Siguiente
+            nextQuestionBtn.classList.remove('hidden'); // Show Next button
         }
 
         function nextQuestion() {
@@ -824,21 +696,21 @@
 
         function calculateGrade(score) {
             let finalGrade;
-            // Nota mínima 2.0 por 0 puntos.
-            // Nota de aprobación 4.0 con 60% de exigencia (0.60 * 78 = 46.8 puntos). Redondeado a 47 para la aprobación.
-            // Nota máxima 7.0 con 78 puntos.
+            // Minimum grade 2.0 for 0 points.
+            // Passing grade 4.0 with 60% requirement (0.60 * 78 = 46.8 points). Rounded to 47 for approval.
+            // Maximum grade 7.0 with 78 points.
 
-            const pointsForPass = 47; // 60% de 78 puntos
+            const pointsForPass = 47; // 60% of 78 points
 
             if (score <= pointsForPass) {
-                // Rango 2.0 a 4.0 (de 0 a 47 puntos)
+                // Range 2.0 to 4.0 (from 0 to 47 points)
                 finalGrade = 2.0 + (score / pointsForPass) * 2.0;
             } else {
-                // Rango 4.0 a 7.0 (de 48 a 78 puntos)
+                // Range 4.0 to 7.0 (from 48 to 78 points)
                 finalGrade = 4.0 + ((score - pointsForPass) / (totalPossiblePoints - pointsForPass)) * 3.0;
             }
             
-            // Asegurar que la nota esté en el rango de 1.0 a 7.0 y redondear
+            // Ensure grade is within 1.0 to 7.0 range and round
             finalGrade = Math.min(7.0, Math.max(1.0, finalGrade)).toFixed(1);
             return finalGrade;
         }
@@ -847,15 +719,15 @@
             quizScreen.classList.add('hidden');
             resultsScreen.classList.remove('hidden');
 
-            // Recupera el score final (por si se refresca la página de resultados)
+            // Retrieve final score (in case results page is refreshed)
             userScore = parseInt(sessionStorage.getItem('quizPoints') || '0'); 
-            totalPointsDisplay.textContent = `Puntos Obtenidos: ${userScore} / ${totalPossiblePoints}`;
+            totalPointsDisplay.textContent = `Points Obtained: ${userScore} / ${totalPossiblePoints}`;
             
             const grade = calculateGrade(userScore);
-            finalGradeDisplay.textContent = `Tu Nota Final: ${grade}`;
+            finalGradeDisplay.textContent = `Your Final Grade: ${grade}`;
 
-            // Generar la tabla de notas para referencia
-            gradeTableBody.innerHTML = ''; // Limpiar tabla antes de llenar
+            // Generate grade reference table
+            gradeTableBody.innerHTML = ''; // Clear table before populating
             const gradeRanges = [
                 { points: "0", displayGrade: "2.0" },
                 { points: "1-10", displayGrade: "2.0 - 2.4" }, // Approx
@@ -863,7 +735,7 @@
                 { points: "21-30", displayGrade: "2.9 - 3.2" },
                 { points: "31-40", displayGrade: "3.3 - 3.7" },
                 { points: "41-46", displayGrade: "3.8 - 3.9" },
-                { points: "47", displayGrade: "4.0 (Aprobación)" }, // Punto de quiebre
+                { points: "47", displayGrade: "4.0 (Passing Grade)" }, // Breaking point
                 { points: "48-55", displayGrade: "4.1 - 4.9" },
                 { points: "56-65", displayGrade: "5.0 - 5.9" },
                 { points: "66-77", displayGrade: "6.0 - 6.9" },
@@ -878,26 +750,26 @@
                 cell2.textContent = range.displayGrade;
                 if (range.points === "47") {
                     row.style.fontWeight = 'bold';
-                    row.style.backgroundColor = '#dcedc8'; /* Verde claro para destacar */
+                    row.style.backgroundColor = '#dcedc8'; /* Light green to highlight */
                 }
             });
         }
 
         function restartQuiz() {
-            sessionStorage.removeItem('quizPoints'); // Limpiar puntos guardados
+            sessionStorage.removeItem('quizPoints'); // Clear saved points
             currentQuestionIndex = 0;
             userScore = 0;
             resultsScreen.classList.add('hidden');
-            quizScreen.classList.add('hidden'); // Asegurarse de que el quiz esté oculto
+            quizScreen.classList.add('hidden'); // Ensure quiz is hidden
             startScreen.classList.remove('hidden');
         }
 
-        // Si la página se carga de nuevo, siempre se inicia desde cero.
+        // If the page is reloaded, always start from scratch.
         window.onload = () => {
             restartQuiz(); 
         };
 
-        // Pre-carga inicial para asegurar que sessionStorage esté listo si es necesario
+        // Initial pre-load to ensure sessionStorage is ready if needed
         if (!sessionStorage.getItem('quizPoints')) {
             sessionStorage.setItem('quizPoints', '0');
         }
