@@ -861,4 +861,46 @@
                 { points: "1-10", displayGrade: "2.0 - 2.4" }, // Approx
                 { points: "11-20", displayGrade: "2.5 - 2.8" },
                 { points: "21-30", displayGrade: "2.9 - 3.2" },
-                { points: "31
+                { points: "31-40", displayGrade: "3.3 - 3.7" },
+                { points: "41-46", displayGrade: "3.8 - 3.9" },
+                { points: "47", displayGrade: "4.0 (Aprobación)" }, // Punto de quiebre
+                { points: "48-55", displayGrade: "4.1 - 4.9" },
+                { points: "56-65", displayGrade: "5.0 - 5.9" },
+                { points: "66-77", displayGrade: "6.0 - 6.9" },
+                { points: "78", displayGrade: "7.0" }
+            ];
+
+            gradeRanges.forEach(range => {
+                const row = gradeTableBody.insertRow();
+                const cell1 = row.insertCell();
+                const cell2 = row.insertCell();
+                cell1.textContent = range.points;
+                cell2.textContent = range.displayGrade;
+                if (range.points === "47") {
+                    row.style.fontWeight = 'bold';
+                    row.style.backgroundColor = '#dcedc8'; /* Verde claro para destacar */
+                }
+            });
+        }
+
+        function restartQuiz() {
+            sessionStorage.removeItem('quizPoints'); // Limpiar puntos guardados
+            currentQuestionIndex = 0;
+            userScore = 0;
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.add('hidden'); // Asegurarse de que el quiz esté oculto
+            startScreen.classList.remove('hidden');
+        }
+
+        // Si la página se carga de nuevo, siempre se inicia desde cero.
+        window.onload = () => {
+            restartQuiz(); 
+        };
+
+        // Pre-carga inicial para asegurar que sessionStorage esté listo si es necesario
+        if (!sessionStorage.getItem('quizPoints')) {
+            sessionStorage.setItem('quizPoints', '0');
+        }
+    </script>
+</body>
+</html>
