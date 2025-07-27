@@ -30,21 +30,9 @@
             <p id="totalPointsDisplay" style="color: #4a148c; font-size: 1.5em;"></p>
             <p id="finalGradeDisplay" style="color: #00796b; font-size: 1.8em; font-weight: bold;"></p>
 
-            <h3 style="margin-top: 30px; color: #00796b;">Grade Reference Table:</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Points Obtained</th>
-                        <th>Grade (1.0 - 7.0)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    </tbody>
-            </table>
-            
             <p style="margin-top: 20px;">Keep practicing to improve! 💪</p>
             <button class="restart-button" onclick="restartQuiz()">Try Again 🔄</button>
-        </div>
+            <button class="review-button" onclick="reviewAnswers()">Review Your Answers 🔍</button> </div>
     </div>
 
     <script>
@@ -606,17 +594,13 @@
                 correctAnswerIndex: 0,
                 points: 1
             },
-            // The questions 79 and 80 for this section correspond to the next missing image.
-            // For now, the quiz has 78 questions.
-            // To reach 80 points, we would need 2 more questions in this section.
-            // Or adjust totalPossiblePoints if the guide only has 78 questions.
-            // I have adjusted totalPossiblePoints to 78 for now, assuming the document only goes up to 78.
-            // If there are more questions in another image, please upload it.
         ];
 
         let currentQuestionIndex = 0;
         let userScore = 0;
-        const totalPossiblePoints = 78; // Sum of all 'points' in the questions array. Updated to 78.
+        const totalPossiblePoints = 78;
+        // Global variable to store user's answers for review
+        let userAnswersData = []; 
 
         // References to HTML elements
         const startScreen = document.getElementById('startScreen');
@@ -631,14 +615,15 @@
 
         const totalPointsDisplay = document.getElementById('totalPointsDisplay');
         const finalGradeDisplay = document.getElementById('finalGradeDisplay');
-        const gradeTableBody = document.querySelector('#resultsScreen table tbody');
 
         // --- Quiz Functions ---
 
         function startQuiz() {
             sessionStorage.setItem('quizPoints', '0'); // Reset points
+            sessionStorage.removeItem('userAnswersData'); // Clear previous review data
             currentQuestionIndex = 0;
             userScore = 0;
+            userAnswersData = []; // Reset for new quiz session
             startScreen.classList.add('hidden');
             quizScreen.classList.remove('hidden');
             loadQuestion();
@@ -657,7 +642,8 @@
                 q.options.forEach((optionText, index) => {
                     const button = document.createElement('button');
                     button.textContent = optionText;
-                    button.onclick = () => checkAnswer(index === q.correctAnswerIndex);
+                    // Pass the selected option's index to checkAnswer
+                    button.onclick = () => checkAnswer(index === q.correctAnswerIndex, index); 
                     optionsContainer.appendChild(button);
                 });
             } else {
@@ -665,7 +651,8 @@
             }
         }
 
-        function checkAnswer(isCorrect) {
+        // Modified checkAnswer to store the selected option
+        function checkAnswer(isCorrect, selectedOptionIndex) {
             const currentQ = questions[currentQuestionIndex];
             const optionsButtons = optionsContainer.querySelectorAll('button');
 
@@ -684,8 +671,17 @@
                 feedbackMessage.className = 'feedback incorrect-feedback';
             }
             
-            // Save accumulated points in sessionStorage for persistence if the page reloads
+            // Store the answer details for review later
+            userAnswersData.push({
+                questionIndex: currentQuestionIndex,
+                selectedOptionIndex: selectedOptionIndex,
+                isCorrect: isCorrect
+            });
+
+            // Save both score and answers data to sessionStorage
             sessionStorage.setItem('quizPoints', userScore); 
+            sessionStorage.setItem('userAnswersData', JSON.stringify(userAnswersData));
+
             nextQuestionBtn.classList.remove('hidden'); // Show Next button
         }
 
@@ -720,45 +716,77 @@
             resultsScreen.classList.remove('hidden');
 
             // Retrieve final score (in case results page is refreshed)
+            // Note: userAnswersData is kept in a global variable for this session,
+            // but for robustness, it's also saved/loaded from sessionStorage.
             userScore = parseInt(sessionStorage.getItem('quizPoints') || '0'); 
             totalPointsDisplay.textContent = `Points Obtained: ${userScore} / ${totalPossiblePoints}`;
             
             const grade = calculateGrade(userScore);
             finalGradeDisplay.textContent = `Your Final Grade: ${grade}`;
+        }
 
-            // Generate grade reference table
-            gradeTableBody.innerHTML = ''; // Clear table before populating
-            const gradeRanges = [
-                { points: "0", displayGrade: "2.0" },
-                { points: "1-10", displayGrade: "2.0 - 2.4" }, // Approx
-                { points: "11-20", displayGrade: "2.5 - 2.8" },
-                { points: "21-30", displayGrade: "2.9 - 3.2" },
-                { points: "31-40", displayGrade: "3.3 - 3.7" },
-                { points: "41-46", displayGrade: "3.8 - 3.9" },
-                { points: "47", displayGrade: "4.0 (Passing Grade)" }, // Breaking point
-                { points: "48-55", displayGrade: "4.1 - 4.9" },
-                { points: "56-65", displayGrade: "5.0 - 5.9" },
-                { points: "66-77", displayGrade: "6.0 - 6.9" },
-                { points: "78", displayGrade: "7.0" }
-            ];
+        // New function to review answers in a new window
+        function reviewAnswers() {
+            const storedAnswers = JSON.parse(sessionStorage.getItem('userAnswersData')) || [];
+            let reviewContent = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Quiz Review - Matías</title>
+                    <style>
+                        body { font-family: 'Arial', sans-serif; line-height: 1.6; padding: 20px; background-color: #f4f4f4; color: #333; }
+                        h1 { color: #00796b; }
+                        .review-question { background-color: #fff; margin-bottom: 20px; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+                        .question-text { font-weight: bold; margin-bottom: 10px; color: #4a148c; }
+                        .your-answer, .correct-answer { margin-left: 20px; }
+                        .your-answer.correct { color: #2e7d32; font-weight: bold; } /* Green for correct user answer */
+                        .your-answer.incorrect { color: #c62828; font-weight: bold; } /* Red for incorrect user answer */
+                        .correct-answer-text { color: #00796b; font-weight: bold; } /* Green for correct answer text */
+                        .section-divider { border-top: 2px dashed #ccc; margin-top: 30px; padding-top: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Quiz Review for Matías</h1>
+                    <p>Here are your answers and the correct solutions:</p>
+            `;
 
-            gradeRanges.forEach(range => {
-                const row = gradeTableBody.insertRow();
-                const cell1 = row.insertCell();
-                const cell2 = row.insertCell();
-                cell1.textContent = range.points;
-                cell2.textContent = range.displayGrade;
-                if (range.points === "47") {
-                    row.style.fontWeight = 'bold';
-                    row.style.backgroundColor = '#dcedc8'; /* Light green to highlight */
+            let lastSection = "";
+            storedAnswers.forEach((answerRecord, index) => {
+                const q = questions[answerRecord.questionIndex];
+                const userAnswerText = q.options[answerRecord.selectedOptionIndex];
+                const correctAnswerText = q.options[q.correctAnswerIndex];
+                const isCorrectClass = answerRecord.isCorrect ? 'correct' : 'incorrect';
+                const resultText = answerRecord.isCorrect ? ' (Correct!)' : ' (Incorrect)';
+
+                if (q.section !== lastSection) {
+                    reviewContent += `<h2 class="section-divider">${q.section}</h2>`;
+                    lastSection = q.section;
                 }
+
+                reviewContent += `
+                    <div class="review-question">
+                        <p class="question-text">${(answerRecord.questionIndex + 1)}. ${q.question}</p>
+                        <p class="your-answer ${isCorrectClass}">Your Answer: ${userAnswerText} ${resultText}</p>
+                        ${!answerRecord.isCorrect ? `<p class="correct-answer">Correct Answer: <span class="correct-answer-text">${correctAnswerText}</span></p>` : ''}
+                    </div>
+                `;
             });
+
+            reviewContent += `</body></html>`;
+
+            const reviewWindow = window.open('', '_blank');
+            reviewWindow.document.write(reviewContent);
+            reviewWindow.document.close();
         }
 
         function restartQuiz() {
             sessionStorage.removeItem('quizPoints'); // Clear saved points
+            sessionStorage.removeItem('userAnswersData'); // Clear saved review data
             currentQuestionIndex = 0;
             userScore = 0;
+            userAnswersData = []; // Reset for new quiz session
             resultsScreen.classList.add('hidden');
             quizScreen.classList.add('hidden'); // Ensure quiz is hidden
             startScreen.classList.remove('hidden');
