@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación: Discurso de Andrés Bello (1843)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f7f6; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .instructions { background: #e8f4fd; padding: 15px; border-left: 5px solid #3498db; margin-bottom: 25px; }
+        .question-block { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        label { font-weight: bold; display: block; margin-bottom: 10px; color: #34495e; }
+        textarea { width: 100%; height: 80px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: vertical; box-sizing: border-box; }
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        button { background-color: #3498db; color: white; padding: 12px 25px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; transition: background 0.3s; }
+        button:hover { background-color: #2980b9; }
+        #results { margin-top: 30px; display: none; }
+        .feedback-item { padding: 10px; margin-top: 10px; border-radius: 4px; border: 1px solid #eee; }
+        .score-display { font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center; color: #2c3e50; }
+        @media print { .instructions, button, .btn-group { display: none !important; } }
+    </style>
+</head>
+<body>
+
+<div class="container" id="main-content">
+    <h1>Evaluación: Andrés Bello (1843)</h1>
+    
+    <div class="instructions">
+        <strong>Instrucciones:</strong> Responde basándote en el discurso inaugural. El sistema analizará conceptos clave en tus respuestas.
+    </div>
+
+    <div id="quiz-form">
+        <div class="question-block">
+            <label>1. ¿Propósito fundamental de la Universidad?</label>
+            <textarea id="q1"></textarea>
+        </div>
+        <div class="question-block">
+            <label>2. ¿Qué significa "Todas las verdades se tocan"?</label>
+            <textarea id="q2"></textarea>
+        </div>
+        <div class="question-block">
+            <label>3. Importancia de la lengua española para Bello:</label>
+            <textarea id="q3"></textarea>
+        </div>
+        <div class="question-block">
+            <label>4. Relación entre ciencias y libertad política:</label>
+            <textarea id="q4"></textarea>
+        </div>
+        <div class="question-block">
+            <label>5. Postura sobre las "letras" vs ciencias prácticas:</label>
+            <textarea id="q5"></textarea>
+        </div>
+        <div class="question-block">
+            <label>6. Significado de "La Universidad no será un cuerpo de propaganda":</label>
+            <textarea id="q6"></textarea>
+        </div>
+
+        <div class="btn-group">
+            <button onclick="evaluateQuiz()">Evaluar Desempeño</button>
+        </div>
+    </div>
+
+    <div id="results">
+        <div class="score-display" id="total-score"></div>
+        <div id="feedback-list"></div>
+        <div class="btn-group">
+            <button onclick="window.print()">Descargar PDF</button>
+            <button onclick="location.reload()">Reiniciar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const evaluationCriteria = [
+        { kw: ["progreso", "civilización", "cultura", "libertad"], fb: "Correcto. Bello destaca la universidad como pilar de la civilización." },
+        { kw: ["conexión", "interdisciplinar", "conocimiento", "unión"], fb: "Bien. Se refiere a la unidad orgánica del saber humano." },
+        { kw: ["identidad", "vínculo", "patrimonio", "comunicación"], fb: "Así es. La lengua es el lazo cultural de la nación." },
+        { kw: ["ilustración", "pensamiento", "pueblo", "independencia"], fb: "Correcto. La ciencia garantiza una libertad real, no solo nominal." },
+        { kw: ["equilibrio", "necesarias", "espíritu", "humana"], fb: "Excelente. Las letras cultivan la moral y el pensamiento crítico." },
+        { kw: ["dogma", "política", "independencia", "autonomía"], fb: "Muy bien. Defiende la objetividad frente a facciones políticas." }
+    ];
+
+    function evaluateQuiz() {
+        let score = 0;
+        const feedbackList = document.getElementById('feedback-list');
+        feedbackList.innerHTML = '';
+
+        for (let i = 1; i <= 6; i++) {
+            const answer = document.getElementById(`q${i}`).value.toLowerCase();
+            const criteria = evaluationCriteria[i-1];
+            const hasKeywords = criteria.kw.some(word => answer.includes(word));
+
+            const div = document.createElement('div');
+            div.className = 'feedback-item';
+            
+            if (hasKeywords && answer.length > 10) {
+                score++;
+                div.style.borderLeft = "5px solid #2ecc71";
+                div.innerHTML = `<strong>Pregunta ${i}:</strong> ${criteria.fb}`;
+            } else {
+                div.style.borderLeft = "5px solid #e74c3c";
+                div.innerHTML = `<strong>Pregunta ${i}:</strong> Respuesta incompleta o falta de conceptos clave.`;
+            }
+            feedbackList.appendChild(div);
+        }
+
+        document.getElementById('total-score').innerText = `Puntaje: ${score} / 6`;
+        document.getElementById('results').style.display = 'block';
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+</script>
+
+</body>
+</html>
